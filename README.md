@@ -1,6 +1,6 @@
 # immut_BitVector
 
-[English](https://github.com/kesmeey/immut_BitVector/blob/master/README.md) | [简体中文](https://github.com/kesmeey/immut_BitVector/blob/master/README_zh_CN.md)
+[English](https://github.com/moonbit-community/immut_BitVector/blob/main/README.md) | [简体中文](https://github.com/moonbit-community/immut_BitVector/blob/main/README_zh_CN.md)
 
 immut_BitVector is an efficient immutable bit vector data structure for compact and efficient storage and manipulation of boolean sequences. It provides a series of bit operations while maintaining immutability (all modification operations return new immut_BitVector instances).
 

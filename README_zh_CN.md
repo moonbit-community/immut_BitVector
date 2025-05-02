@@ -1,6 +1,7 @@
 # immut_BitVector
 
-[English](https://github.com/kesmeey/immut_BitVector/blob/master/README.md) | [简体中文](https://github.com/kesmeey/immut_BitVector/blob/master/README_zh_CN.md)
+
+[English](https://github.com/moonbit-community/immut_BitVector/blob/main/README.md) | [简体中文](https://github.com/moonbit-community/immut_BitVector/blob/main/README_zh_CN.md)
 
 immut_BitVector是一个高效的不可变位向量数据结构，用于紧凑且高效地存储和操作布尔序列。它提供了一系列位操作，同时保持不可变性（所有修改操作都返回新的immut_BitVector实例）。
 
