@@ -1,0 +1,47 @@
+package "moonbitlang/immut/BitVector"
+
+// Constructors
+fn uint64_max() -> UInt64
+fn new(Int) -> BitVector
+fn ones(Int) -> BitVector
+fn from_ints(FixedArray[UInt64], Int) -> BitVector
+fn from_bools(FixedArray[Bool]) -> BitVector
+fn from_string(String) -> BitVector
+
+// Basic Operations
+fn get(BitVector, Int) -> Bool
+fn set(BitVector, Int) -> BitVector
+fn clear(BitVector, Int) -> BitVector
+fn flip(BitVector, Int) -> BitVector
+fn flip_all(BitVector) -> BitVector
+
+// Logical Operations
+fn and(BitVector, BitVector) -> BitVector
+fn or(BitVector, BitVector) -> BitVector
+fn xor(BitVector, BitVector) -> BitVector
+
+// Bit Counting and Searching
+fn count_ones(BitVector) -> Int
+fn count_zeros(BitVector) -> Int
+fn pop_count(UInt64) -> Int
+fn find_first_set(BitVector) -> Int
+fn lowest_unset_bit(UInt64) -> Int
+fn lowest_set_bit(UInt64) -> Int
+
+// Slicing and Concatenation
+fn slice(BitVector, Int, Int) -> BitVector
+fn concat(BitVector, BitVector) -> BitVector
+
+// Serialization
+fn to_string(BitVector) -> String
+fn to_bools(BitVector) -> FixedArray[Bool]
+
+// Utility Methods
+fn is_all_zeros(BitVector) -> Bool
+fn is_all_ones(BitVector) -> Bool
+fn length(BitVector) -> Int
+fn not(BitVector) -> BitVector
+
+// Bit Masking
+fn bit_mask(Int) -> UInt64
+fn low_bits_mask(Int) -> UInt64
