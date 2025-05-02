@@ -1,10 +1,10 @@
 {
   "name": "kesmeey/immut_BitVector",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "readme": "README.md",
   "repository": "",
   "license": "Apache-2.0",
-  "keywords": [],
-  "description": "",
+  "keywords": ["bit-vector", "immutable", "bit-manipulation"],
+  "description": "An efficient immutable bit vector data structure for compact and efficient storage and manipulation of boolean sequences, supporting bit operations, logical operations, slicing, concatenation and more, while maintaining immutability",
   "source": "src"
 }
