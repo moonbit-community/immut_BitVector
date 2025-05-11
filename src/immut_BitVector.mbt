@@ -378,6 +378,8 @@ pub fn slice(self : BitVector, start : Int, end : Int) -> BitVector {
     result.data[dst_idx] = first_word_bits
 
     // 处理中间的完整字和最后一个字
+
+    // 处理中间的完整字和最后一个字
     for src_idx in (start_word + 1)..=end_word {
       // 高位部分来自上一个字
       let high_bits = self.data[src_idx - 1] << (64 - start_bit)
@@ -390,12 +392,16 @@ pub fn slice(self : BitVector, start : Int, end : Int) -> BitVector {
         self.data[src_idx]
       }
 
-      // 组合位
-      result.data[dst_idx] = result.data[dst_idx] | high_bits
-      dst_idx += 1
-      if dst_idx < result.data.length() {
-        result.data[dst_idx] = low_bits >> start_bit
+      // 关键修改：处理当前字的低位到前一个结果字的高位
+      result.data[dst_idx] = result.data[dst_idx] |
+        high_bits |
+        (low_bits << (64 - start_bit))
+
+      // 当前字的高位去下一个结果字（如果有）
+      if dst_idx + 1 < result.data.length() {
+        result.data[dst_idx + 1] = low_bits >> start_bit
       }
+      dst_idx += 1
     }
   }
   return result

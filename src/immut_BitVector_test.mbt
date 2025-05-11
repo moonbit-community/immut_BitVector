@@ -4,6 +4,7 @@ test "new_constructor" {
   let bv = @immut_BitVector.new(64)
   assert_eq!(bv.length(), 64)
   assert_eq!(bv.is_all_zeros(), true)
+  assert_eq!(bv.is_all_ones(), false)
   assert_eq!(bv.count_ones(), 0)
 }
 
@@ -12,6 +13,7 @@ test "ones_constructor" {
   let bv = @immut_BitVector.ones(64)
   assert_eq!(bv.length(), 64)
   assert_eq!(bv.is_all_ones(), true)
+  assert_eq!(bv.is_all_zeros(), false)
   assert_eq!(bv.count_zeros(), 0)
 }
 
@@ -302,7 +304,7 @@ test "complex_slice_operations" {
   let large_bv2 = large_bv.set(62).set(63).set(64).set(65)
   let s2 = large_bv2.slice(62, 66)
   assert_eq!(s2.length(), 4)
-  assert_eq!(s2.to_string(), "1100") // 修改期望值
+  assert_eq!(s2.to_string(), "1111")
 }
 
 ///|
@@ -492,4 +494,94 @@ test "serialization_roundtrip" {
   let serialized = original.to_string()
   let deserialized = @immut_BitVector.from_string(serialized)
   assert_eq!(original.to_string(), deserialized.to_string())
+}
+
+///|
+/// 测试lowest_unset_bit函数
+test "lowest_unset_bit_function" {
+  // 测试正常情况，低位有一些0
+  assert_eq!(@immut_BitVector.lowest_unset_bit((10).to_uint64()), 0) // 1010二进制，最低位是0
+  assert_eq!(@immut_BitVector.lowest_unset_bit((6).to_uint64()), 0) // 0110二进制，最低位是0
+
+  // 测试连续几个1后才有0的情况
+  assert_eq!(@immut_BitVector.lowest_unset_bit((7).to_uint64()), 3) // 0111二进制，第3位是第一个0
+  assert_eq!(@immut_BitVector.lowest_unset_bit((15).to_uint64()), 4) // 1111二进制，第4位是第一个0
+
+  // 测试全为1的情况
+  assert_eq!(
+    @immut_BitVector.lowest_unset_bit(@immut_BitVector.uint64_max()),
+    64,
+  )
+}
+
+///|
+/// 测试slice在字边界上跨越多个字的情况
+test "slice_at_word_boundary_across_multiple_words" {
+  // 创建一个跨越多个字（至少3个UInt64，即192位）的BitVector
+  let length = 192
+  let mut bv = @immut_BitVector.new(length)
+
+  // 设置一些特定位，确保能验证正确复制
+  bv = bv.set(64) // 第二个字的第一位
+  bv = bv.set(127) // 第二个字的最后一位
+  bv = bv.set(128) // 第三个字的第一位
+  bv = bv.set(191) // 第三个字的最后一位
+
+  // 从字边界开始切片，跨越多个字
+  let slice1 = bv.slice(64, 192) // 从第二个字开始，到最后
+
+  // 验证切片的长度和内容
+  assert_eq!(slice1.length(), 128)
+  assert_true!(slice1.get(0)) // 原来的第64位，现在是第0位
+  assert_true!(slice1.get(63)) // 原来的第127位，现在是第63位
+  assert_true!(slice1.get(64)) // 原来的第128位，现在是第64位
+  assert_true!(slice1.get(127)) // 原来的第191位，现在是第127位
+
+  // 还需要测试end_word处的掩码处理
+  let slice2 = bv.slice(64, 130) // 从第二个字开始，到第三个字的第2位
+  assert_eq!(slice2.length(), 66)
+  assert_true!(slice2.get(0)) // 原来的第64位
+  assert_true!(slice2.get(63)) // 原来的第127位
+  assert_true!(slice2.get(64)) // 原来的第128位
+  assert_false!(slice2.get(65)) // 原来的第129位
+}
+
+///|
+/// 测试slice不在字边界上且跨越多个字的情况
+test "slice_not_at_word_boundary_across_multiple_words" {
+  // 创建一个跨越多个字的BitVector
+  let length = 200
+  let mut bv = @immut_BitVector.new(length)
+
+  // 设置一些特定位置的值
+  bv = bv.set(10) // 第一个字中间
+  bv = bv.set(63) // 第一个字最后一位
+  bv = bv.set(64) // 第二个字第一位
+  bv = bv.set(100) // 第二个字中间
+  bv = bv.set(127) // 第二个字最后一位
+  bv = bv.set(128) // 第三个字第一位
+  bv = bv.set(190) // 第三个字中间
+
+  // 从非字边界开始，跨越多个字的切片
+  let slice = bv.slice(10, 190)
+  println("Original BitVector:")
+  println("Bit 64 = " + bv.get(64).to_string())
+  println("Slice Result:")
+  println("Bit 54 = " + slice.get(54).to_string())
+  // 验证切片的长度和内容
+  assert_eq!(slice.length(), 180)
+  assert_true!(slice.get(0)) // 原来的第10位
+  assert_true!(slice.get(53)) // 原来的第63位
+  assert_true!(slice.get(54)) // 原来的第64位
+  assert_true!(slice.get(90)) // 原来的第100位
+  assert_true!(slice.get(117)) // 原来的第127位
+  assert_true!(slice.get(118)) // 原来的第128位
+
+  // 测试源数据大小导致目标索引超出范围的情况
+  // 创建一个正好使dst_idx在边界的BitVector
+  let large_bv = @immut_BitVector.new(200)
+  let slice2 = large_bv.slice(10, 138) // 这会导致切片结果有3个字，最后一个字只用一点点
+
+  // 确保切片长度正确
+  assert_eq!(slice2.length(), 128)
 }

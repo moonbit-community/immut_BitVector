@@ -97,3 +97,17 @@ test "panic concat resulting in excessive length should panic" {
   let result = bv1.concat(bv2) // 可能导致长度溢出
   result |> ignore
 }
+
+///|
+test "panic from_ints with non-positive length should panic" {
+  let ints = FixedArray::from_array([(3).to_uint64(), (7).to_uint64()])
+  let result = @immut_BitVector.from_ints(ints, -1) // 使用负数长度
+  result |> ignore
+}
+
+///|
+test "panic from_ints with zero length should panic" {
+  let ints = FixedArray::from_array([(3).to_uint64(), (7).to_uint64()])
+  let result = @immut_BitVector.from_ints(ints, 0) // 使用零长度
+  result |> ignore
+}
