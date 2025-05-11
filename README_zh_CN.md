@@ -5,7 +5,7 @@
 
 
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/moonbit-community/unicodeUtil/ci.yml)](https://github.com/moonbit-community/Indeximmut_BitVector/actions)  [![codecov](https://codecov.io/gh/moonbit-community/NyaSearch/branch/main/graph/badge.svg)](https://codecov.io/gh/moonbit-community/immut_BitVector)  
+[![Build Status](https://img.shields.io/github/actions/workflow/status/moonbit-community/immut_BitVector/ci.yml)](https://github.com/moonbit-community/immut_BitVector/actions)  [![codecov](https://codecov.io/gh/moonbit-community/immut_BitVector/branch/main/graph/badge.svg)](https://codecov.io/gh/moonbit-community/immut_BitVector)  
 
 immut_BitVector是一个高效的不可变位向量数据结构，用于紧凑且高效地存储和操作布尔序列。它提供了一系列位操作，同时保持不可变性（所有修改操作都返回新的immut_BitVector实例）。
 

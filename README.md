@@ -3,7 +3,7 @@
 [English](https://github.com/moonbit-community/immut_BitVector/blob/main/README.md) | [简体中文](https://github.com/moonbit-community/immut_BitVector/blob/main/README_zh_CN.md) 
 
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/moonbit-community/unicodeUtil/ci.yml)](https://github.com/moonbit-community/IndexMap/actions)  [![codecov](https://codecov.io/gh/moonbit-community/NyaSearch/branch/main/graph/badge.svg)](https://codecov.io/gh/moonbit-community/IndexMap)  
+[![Build Status](https://img.shields.io/github/actions/workflow/status/moonbit-community/immut_BitVector/ci.yml)](https://github.com/moonbit-community/Indeximmut_BitVector/actions)  [![codecov](https://codecov.io/gh/moonbit-community/immut_BitVector/branch/main/graph/badge.svg)](https://codecov.io/gh/moonbit-community/immut_BitVector)  
 
 
 immut_BitVector is an efficient immutable bit vector data structure for compact and efficient storage and manipulation of boolean sequences. It provides a series of bit operations while maintaining immutability (all modification operations return new immut_BitVector instances).
