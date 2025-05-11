@@ -585,3 +585,107 @@ test "slice_not_at_word_boundary_across_multiple_words" {
   // 确保切片长度正确
   assert_eq!(slice2.length(), 128)
 }
+
+///|
+/// 测试from_ints函数中处理非零余数的代码路径
+test "from_ints_with_remainder" {
+  // 创建一个长度不是64倍数的UInt64数组
+  // 例如，创建一个长度为100位的位向量(需要2个UInt64)
+  let ints = FixedArray::from_array([
+    uint64_max(), // 第一个UInt64全为1
+    uint64_max(), // 第二个UInt64全为1，但我们只需要使用前36位
+  ])
+
+  // 创建长度为100的位向量
+  let bv = @immut_BitVector.from_ints(ints, 100)
+
+  // 验证长度正确
+  assert_eq!(bv.length(), 100)
+
+  // 验证前64位全为1
+  for i in 0..<64 {
+    assert_true!(bv.get(i))
+  }
+
+  // 验证接下来的36位也全为1
+  for i in 64..<100 {
+    assert_true!(bv.get(i))
+  }
+
+
+}
+
+///|
+/// 测试concat函数中第一个向量长度是64倍数的情况
+test "concat_with_aligned_first_vector" {
+  // 创建一个长度正好是64倍数的位向量
+  let bv1 = @immut_BitVector.new(64)
+  // 设置几个位以便我们可以验证数据是否正确拼接
+  let bv1 = bv1.set(0).set(63)
+
+  // 创建第二个位向量
+  let bv2 = @immut_BitVector.new(10)
+  let bv2 = bv2.set(0).set(9)
+
+  // 拼接
+  let result = bv1.concat(bv2)
+
+  // 验证拼接后的长度
+  assert_eq!(result.length(), 74)
+
+  // 验证第一个位向量的位保持不变
+  assert_true!(result.get(0))
+  assert_true!(result.get(63))
+
+  // 验证第二个位向量的位被正确添加
+  assert_true!(result.get(64)) // bv2的第0位
+  assert_true!(result.get(73)) // bv2的第9位
+}
+
+///|
+/// 测试is_all_zeros函数中遍历多个UInt64的情况
+test "is_all_zeros_with_multiple_uint64s" {
+  // 创建一个包含多个UInt64的全0位向量
+  let bv_zeros = @immut_BitVector.new(130) // 需要3个UInt64
+
+  // 验证is_all_zeros返回true
+  assert_true!(bv_zeros.is_all_zeros())
+
+  // 创建一个第一个UInt64非0的位向量
+  let bv_first_nonzero = @immut_BitVector.new(130)
+  let bv_first_nonzero = bv_first_nonzero.set(10) // 设置第一个UInt64中的一个位
+
+  // 验证is_all_zeros返回false
+  assert_false!(bv_first_nonzero.is_all_zeros())
+
+  // 创建一个中间UInt64非0的位向量
+  let bv_middle_nonzero = @immut_BitVector.new(130)
+  let bv_middle_nonzero = bv_middle_nonzero.set(65) // 设置中间UInt64中的一个位
+
+  // 验证is_all_zeros返回false
+  assert_false!(bv_middle_nonzero.is_all_zeros())
+}
+
+///|
+/// 测试is_all_ones函数中遍历多个UInt64的情况
+test "is_all_ones_with_multiple_uint64s" {
+  // 创建一个包含多个UInt64的全1位向量
+  let bv_ones = @immut_BitVector.ones(130) // 需要3个UInt64
+
+  // 验证is_all_ones返回true
+  assert_true!(bv_ones.is_all_ones())
+
+  // 创建一个第一个UInt64不全为1的位向量
+  let bv_first_not_all_ones = @immut_BitVector.ones(130)
+  let bv_first_not_all_ones = bv_first_not_all_ones.clear(10) // 清除第一个UInt64中的一个位
+
+  // 验证is_all_ones返回false
+  assert_false!(bv_first_not_all_ones.is_all_ones())
+
+  // 创建一个中间UInt64不全为1的位向量
+  let bv_middle_not_all_ones = @immut_BitVector.ones(130)
+  let bv_middle_not_all_ones = bv_middle_not_all_ones.clear(65) // 清除中间UInt64中的一个位
+
+  // 验证is_all_ones返回false
+  assert_false!(bv_middle_not_all_ones.is_all_ones())
+}
