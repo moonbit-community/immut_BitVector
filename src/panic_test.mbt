@@ -55,7 +55,7 @@ test "panic slice with start greater than end should panic" {
 
 ///|
 test "panic from_ints with mismatched length should panic" {
-  let ints = FixedArray::from_array([(3).to_uint64(), (7).to_uint64()])
+  let ints = FixedArray::from_array([3UL, 7UL])
   let result = @immut_BitVector.from_ints(ints, 300) // 位数不能匹配整数数组长度
   result |> ignore
 } //
@@ -100,14 +100,14 @@ test "panic concat resulting in excessive length should panic" {
 
 ///|
 test "panic from_ints with non-positive length should panic" {
-  let ints = FixedArray::from_array([(3).to_uint64(), (7).to_uint64()])
+  let ints = FixedArray::from_array([3UL, 7UL])
   let result = @immut_BitVector.from_ints(ints, -1) // 使用负数长度
   result |> ignore
 }
 
 ///|
 test "panic from_ints with zero length should panic" {
-  let ints = FixedArray::from_array([(3).to_uint64(), (7).to_uint64()])
+  let ints = FixedArray::from_array([3UL, 7UL])
   let result = @immut_BitVector.from_ints(ints, 0) // 使用零长度
   result |> ignore
 }

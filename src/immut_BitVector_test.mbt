@@ -19,7 +19,7 @@ test "ones_constructor" {
 
 ///|
 test "from_ints_constructor" {
-  let ints = FixedArray::from_array([(3).to_uint64(), (7).to_uint64()]) // 二进制: 11 and 111
+  let ints = FixedArray::from_array([3UL, 7UL]) // 二进制: 11 and 111
   let bv = @immut_BitVector.from_ints(ints, 128)
   assert_eq!(bv.get(0), true)
   assert_eq!(bv.get(1), true)
@@ -232,32 +232,32 @@ test "not_operation" {
 test "bit_mask_function" {
   // 测试位掩码辅助函数
   let mask0 = @immut_BitVector.bit_mask(0)
-  assert_eq!(mask0, (1).to_uint64())
+  assert_eq!(mask0, 1UL)
   let mask5 = @immut_BitVector.bit_mask(5)
-  assert_eq!(mask5, (1 << 5).to_uint64())
+  assert_eq!(mask5, 1UL << 5)
   let mask63 = @immut_BitVector.bit_mask(63)
-  assert_eq!(mask63, (1).to_uint64() << 63)
+  assert_eq!(mask63, 1UL << 63)
 }
 
 ///|
 test "low_bits_mask_function" {
   // 测试低位掩码辅助函数
   let mask0 = @immut_BitVector.low_bits_mask(0)
-  assert_eq!(mask0, (1).to_uint64())
+  assert_eq!(mask0, 1UL)
   let mask3 = @immut_BitVector.low_bits_mask(3)
-  assert_eq!(mask3, (15).to_uint64()) // 1111 二进制
+  assert_eq!(mask3, 15UL) // 1111 二进制
   let mask63 = @immut_BitVector.low_bits_mask(63)
-  assert_eq!(mask63, @immut_BitVector.uint64_max())
+  assert_eq!(mask63, @immut_BitVector.UINT64_MAX)
 }
 
 ///|
 test "lowest_set_bit_function" {
   // 测试查找最低的1位
-  let num1 = (1).to_uint64() // 二进制: 0...01
+  let num1 = 1UL // 二进制: 0...01
   assert_eq!(@immut_BitVector.lowest_set_bit(num1), 0)
-  let num2 = (8).to_uint64() // 二进制: 0...01000
+  let num2 = 8UL // 二进制: 0...01000
   assert_eq!(@immut_BitVector.lowest_set_bit(num2), 3)
-  let num3 = (0).to_uint64() // 全0
+  let num3 = 0UL // 全0
   assert_eq!(@immut_BitVector.lowest_set_bit(num3), -1)
 }
 
@@ -500,18 +500,15 @@ test "serialization_roundtrip" {
 /// 测试lowest_unset_bit函数
 test "lowest_unset_bit_function" {
   // 测试正常情况，低位有一些0
-  assert_eq!(@immut_BitVector.lowest_unset_bit((10).to_uint64()), 0) // 1010二进制，最低位是0
-  assert_eq!(@immut_BitVector.lowest_unset_bit((6).to_uint64()), 0) // 0110二进制，最低位是0
+  assert_eq!(@immut_BitVector.lowest_unset_bit(10UL), 0) // 1010二进制，最低位是0
+  assert_eq!(@immut_BitVector.lowest_unset_bit(6UL), 0) // 0110二进制，最低位是0
 
   // 测试连续几个1后才有0的情况
-  assert_eq!(@immut_BitVector.lowest_unset_bit((7).to_uint64()), 3) // 0111二进制，第3位是第一个0
-  assert_eq!(@immut_BitVector.lowest_unset_bit((15).to_uint64()), 4) // 1111二进制，第4位是第一个0
+  assert_eq!(@immut_BitVector.lowest_unset_bit(7UL), 3) // 0111二进制，第3位是第一个0
+  assert_eq!(@immut_BitVector.lowest_unset_bit(15UL), 4) // 1111二进制，第4位是第一个0
 
   // 测试全为1的情况
-  assert_eq!(
-    @immut_BitVector.lowest_unset_bit(@immut_BitVector.uint64_max()),
-    64,
-  )
+  assert_eq!(@immut_BitVector.lowest_unset_bit(@immut_BitVector.UINT64_MAX), 64)
 }
 
 ///|
@@ -592,9 +589,10 @@ test "from_ints_with_remainder" {
   // 创建一个长度不是64倍数的UInt64数组
   // 例如，创建一个长度为100位的位向量(需要2个UInt64)
   let ints = FixedArray::from_array([
-    uint64_max(), // 第一个UInt64全为1
-    uint64_max(), // 第二个UInt64全为1，但我们只需要使用前36位
-  ])
+      UINT64_MAX, // 第一个UInt64全为1
+      UINT64_MAX,
+    ], // 第二个UInt64全为1，但我们只需要使用前36位
+  )
 
   // 创建长度为100的位向量
   let bv = @immut_BitVector.from_ints(ints, 100)
@@ -611,8 +609,6 @@ test "from_ints_with_remainder" {
   for i in 64..<100 {
     assert_true!(bv.get(i))
   }
-
-
 }
 
 ///|
