@@ -3,9 +3,7 @@
 /// It provides a series of bit operations while maintaining immutability (all modification operations return new BitVector instances).
 
 ///|
-pub fn uint64_max() -> UInt64 {
-  return (-1).to_uint64()
-}
+pub const UINT64_MAX = 0xffffffffffffffffUL
 
 ///|
 /// Creates a bit vector of specified length with all bits set to 0
@@ -21,7 +19,7 @@ pub fn new(length : Int) -> BitVector {
   // Calculate the valid bit mask for the last UInt64
   let remainder = length & 63 // equivalent to length % 64
   let last_mask = if remainder == 0 {
-    uint64_max()
+    UINT64_MAX
   } else {
     ((1).to_uint64() << remainder) - (1).to_uint64()
   }
@@ -35,12 +33,12 @@ pub fn ones(length : Int) -> BitVector {
 
   // Fill all UInt64s with 1s
   for i = 0; i < bv.data.length(); i = i + 1 {
-    bv.data[i] = uint64_max()
+    bv.data[i] = UINT64_MAX
   }
 
   // Set the last UInt64, only setting valid bits to 1
   if bv.data.length() > 0 {
-    bv.data[bv.data.length() - 1] = uint64_max() & bv.last_mask
+    bv.data[bv.data.length() - 1] = UINT64_MAX & bv.last_mask
   }
   bv
 }
@@ -59,7 +57,7 @@ pub fn from_ints(ints : FixedArray[UInt64], length : Int) -> BitVector {
   // Calculate the valid bit mask for the last UInt64
   let remainder = length & 63
   let last_mask = if remainder == 0 {
-    uint64_max()
+    UINT64_MAX
   } else {
     ((1).to_uint64() << remainder) - (1).to_uint64()
   }
@@ -157,7 +155,7 @@ pub fn clear(self : BitVector, index : Int) -> BitVector {
   // Create a new bit vector
   let new_data = self.data.copy()
   new_data[word_idx] = new_data[word_idx] &
-    (uint64_max() ^ ((1).to_uint64() << bit_idx))
+    (UINT64_MAX ^ ((1).to_uint64() << bit_idx))
   { data: new_data, length: self.length, last_mask: self.last_mask }
 }
 
@@ -183,7 +181,7 @@ pub fn flip_all(self : BitVector) -> BitVector {
 
   // Flip all integers
   for i in 0..<new_data.length() {
-    new_data[i] = new_data[i] ^ uint64_max()
+    new_data[i] = new_data[i] ^ UINT64_MAX
   }
 
   // Ensure invalid bits in the last integer are 0
@@ -299,7 +297,7 @@ pub fn find_first_set(self : BitVector) -> Int {
 ///|
 /// Finds the index of the first bit set to 0 in the integer, returns -1 if none
 pub fn lowest_unset_bit(x : UInt64) -> Int {
-  if x == uint64_max() {
+  if x == UINT64_MAX {
     return 64 // indicates no 0 bits
   }
   let mut pos = 0
@@ -504,7 +502,7 @@ pub fn is_all_zeros(self : BitVector) -> Bool {
 /// Checks if the bit vector is all ones
 pub fn is_all_ones(self : BitVector) -> Bool {
   for i = 0; i < self.data.length() - 1; i = i + 1 {
-    if self.data[i] != uint64_max() {
+    if self.data[i] != UINT64_MAX {
       return false
     }
   }
@@ -536,7 +534,7 @@ pub fn bit_mask(bit_pos : Int) -> UInt64 {
 ///| Creates a mask from 0 to the specified position (those bits are 1)
 pub fn low_bits_mask(pos : Int) -> UInt64 {
   if pos >= 63 {
-    return uint64_max()
+    return UINT64_MAX
   }
   ((1).to_uint64() << (pos + 1)) - 1
 }
