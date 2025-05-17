@@ -154,7 +154,7 @@ pub fn clear(self : BitVector, index : Int) -> BitVector {
 
   // Create a new bit vector
   let new_data = self.data.copy()
-  new_data[word_idx] = new_data[word_idx] & (UINT64_MAX ^ (1UL << bit_idx))
+  new_data[word_idx] = new_data[word_idx] & (1UL << bit_idx).lnot()
   { data: new_data, length: self.length, last_mask: self.last_mask }
 }
 
@@ -180,7 +180,7 @@ pub fn flip_all(self : BitVector) -> BitVector {
 
   // Flip all integers
   for i in 0..<new_data.length() {
-    new_data[i] = new_data[i] ^ UINT64_MAX
+    new_data[i] = new_data[i].lnot()
   }
 
   // Ensure invalid bits in the last integer are 0
