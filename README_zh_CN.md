@@ -45,8 +45,8 @@ let bv3 = @immut_BitVector.from_bools(bools)  // 结果为"01010"
 let bv4 = @immut_BitVector.from_string("10110")  // 从二进制字符串创建
 
 // 从整数数组创建
-let ints = FixedArray::make(2, (0).to_uint64())
-ints[0] = (42).to_uint64()  // 二进制：...0101010
+let ints = FixedArray::make(2, 0UL)
+ints[0] = 42UL  // 二进制：...0101010
 let bv5 = @immut_BitVector.from_ints(ints, 128)  // 长度为128位的向量
 ```
 

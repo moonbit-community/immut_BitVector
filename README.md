@@ -44,8 +44,8 @@ let bv3 = @immut_BitVector.from_bools(bools)  // Results in "01010"
 let bv4 = @immut_BitVector.from_string("10110")  // From binary string
 
 // Create from integer array
-let ints = FixedArray::make(2, (0).to_uint64())
-ints[0] = (42).to_uint64()  // Binary: ...0101010
+let ints = FixedArray::make(2, 0UL)
+ints[0] = 42UL  // Binary: ...0101010
 let bv5 = @immut_BitVector.from_ints(ints, 128)  // 128-bit length vector
 ```
 

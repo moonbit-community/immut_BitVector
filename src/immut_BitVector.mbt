@@ -14,14 +14,14 @@ pub fn new(length : Int) -> BitVector {
 
   // Calculate how many UInt64s are needed to store bits of specified length
   let num_ints = (length + 63) >> 6
-  let data = FixedArray::make(num_ints, (0).to_uint64())
+  let data = FixedArray::make(num_ints, 0UL)
 
   // Calculate the valid bit mask for the last UInt64
   let remainder = length & 63 // equivalent to length % 64
   let last_mask = if remainder == 0 {
     UINT64_MAX
   } else {
-    ((1).to_uint64() << remainder) - (1).to_uint64()
+    (1UL << remainder) - 1UL
   }
   { data, length, last_mask }
 }
@@ -59,7 +59,7 @@ pub fn from_ints(ints : FixedArray[UInt64], length : Int) -> BitVector {
   let last_mask = if remainder == 0 {
     UINT64_MAX
   } else {
-    ((1).to_uint64() << remainder) - (1).to_uint64()
+    (1UL << remainder) - 1UL
   }
 
   // Copy array and clear invalid bits in the last UInt64
@@ -81,7 +81,7 @@ pub fn from_bools(bools : FixedArray[Bool]) -> BitVector {
     if bools[i] {
       let word_idx = i >> 6 // divide by 64
       let bit_idx = i & 63 // modulo 64
-      bv.data[word_idx] = bv.data[word_idx] | ((1).to_uint64() << bit_idx)
+      bv.data[word_idx] = bv.data[word_idx] | (1UL << bit_idx)
     }
   }
   bv
@@ -96,7 +96,7 @@ pub fn from_string(s : String) -> BitVector {
     if s[i] == '1' {
       let word_idx = i >> 6
       let bit_idx = i & 63
-      bv.data[word_idx] = bv.data[word_idx] | ((1).to_uint64() << bit_idx)
+      bv.data[word_idx] = bv.data[word_idx] | (1UL << bit_idx)
     } else if s[i] != '0' {
       abort("String must contain only '0' and '1' characters")
     }
@@ -115,7 +115,7 @@ pub fn get(self : BitVector, index : Int) -> Bool {
   }
   let word_idx = index >> 6
   let bit_idx = index & 63
-  (self.data[word_idx] & ((1).to_uint64() << bit_idx)) != 0
+  (self.data[word_idx] & (1UL << bit_idx)) != 0
 }
 
 ///|
@@ -128,13 +128,13 @@ pub fn set(self : BitVector, index : Int) -> BitVector {
   let bit_idx = index & 63
 
   // If the bit is already 1, return the original bit vector
-  if (self.data[word_idx] & ((1).to_uint64() << bit_idx)) != 0 {
+  if (self.data[word_idx] & (1UL << bit_idx)) != 0 {
     return self
   }
 
   // Create a new bit vector
   let new_data = self.data.copy()
-  new_data[word_idx] = new_data[word_idx] | ((1).to_uint64() << bit_idx)
+  new_data[word_idx] = new_data[word_idx] | (1UL << bit_idx)
   { data: new_data, length: self.length, last_mask: self.last_mask }
 }
 
@@ -148,14 +148,13 @@ pub fn clear(self : BitVector, index : Int) -> BitVector {
   let bit_idx = index & 63
 
   // If the bit is already 0, return the original bit vector
-  if (self.data[word_idx] & ((1).to_uint64() << bit_idx)) == 0 {
+  if (self.data[word_idx] & (1UL << bit_idx)) == 0 {
     return self
   }
 
   // Create a new bit vector
   let new_data = self.data.copy()
-  new_data[word_idx] = new_data[word_idx] &
-    (UINT64_MAX ^ ((1).to_uint64() << bit_idx))
+  new_data[word_idx] = new_data[word_idx] & (UINT64_MAX ^ (1UL << bit_idx))
   { data: new_data, length: self.length, last_mask: self.last_mask }
 }
 
@@ -170,7 +169,7 @@ pub fn flip(self : BitVector, index : Int) -> BitVector {
 
   // Create a new bit vector
   let new_data = self.data.copy()
-  new_data[word_idx] = new_data[word_idx] ^ ((1).to_uint64() << bit_idx)
+  new_data[word_idx] = new_data[word_idx] ^ (1UL << bit_idx)
   { data: new_data, length: self.length, last_mask: self.last_mask }
 }
 
@@ -202,7 +201,7 @@ pub fn and(self : BitVector, other : BitVector) -> BitVector {
   if self.length != other.length {
     abort("BitVectors must have the same length for logical operations")
   }
-  let new_data = FixedArray::make(self.data.length(), (0).to_uint64())
+  let new_data = FixedArray::make(self.data.length(), 0UL)
 
   // Perform bitwise AND operation
   for i in 0..<new_data.length() {
@@ -217,7 +216,7 @@ pub fn or(self : BitVector, other : BitVector) -> BitVector {
   if self.length != other.length {
     abort("BitVectors must have the same length for logical operations")
   }
-  let new_data = FixedArray::make(self.data.length(), (0).to_uint64())
+  let new_data = FixedArray::make(self.data.length(), 0UL)
 
   // Perform bitwise OR operation
   for i in 0..<new_data.length() {
@@ -232,7 +231,7 @@ pub fn xor(self : BitVector, other : BitVector) -> BitVector {
   if self.length != other.length {
     abort("BitVectors must have the same length for logical operations")
   }
-  let new_data = FixedArray::make(self.data.length(), (0).to_uint64())
+  let new_data = FixedArray::make(self.data.length(), 0UL)
 
   // Perform bitwise XOR operation
   for i in 0..<new_data.length() {
@@ -350,7 +349,7 @@ pub fn slice(self : BitVector, start : Int, end : Int) -> BitVector {
 
   // 处理切片在单个字内的情况
   if start_word == end_word {
-    let mask = (((1).to_uint64() << (end_bit - start_bit + 1)) - 1) << start_bit
+    let mask = ((1UL << (end_bit - start_bit + 1)) - 1) << start_bit
     let bits = (self.data[start_word] & mask) >> start_bit
     result.data[0] = bits
     return result
@@ -528,7 +527,7 @@ pub fn not(self : BitVector) -> BitVector {
 
 ///| Creates a bit mask at the specified position (that bit is 1, others are 0)
 pub fn bit_mask(bit_pos : Int) -> UInt64 {
-  (1).to_uint64() << bit_pos
+  1UL << bit_pos
 }
 
 ///| Creates a mask from 0 to the specified position (those bits are 1)
@@ -536,5 +535,5 @@ pub fn low_bits_mask(pos : Int) -> UInt64 {
   if pos >= 63 {
     return UINT64_MAX
   }
-  ((1).to_uint64() << (pos + 1)) - 1
+  (1UL << (pos + 1)) - 1
 }
