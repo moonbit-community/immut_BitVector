@@ -361,7 +361,7 @@ pub fn BitVector::slice(self : BitVector, start : Int, end : Int) -> BitVector {
   // 处理切片跨越多个字的情况
   if start_bit == 0 {
     // 起始位在字边界上，可以直接复制完整字
-    for i in start_word..=end_word {
+    for i in start_word..<=end_word {
       if i == end_word {
         // 最后一个字需要掩码处理
         result.data[i - start_word] = self.data[i] & low_bits_mask(end_bit + 1)
@@ -380,7 +380,7 @@ pub fn BitVector::slice(self : BitVector, start : Int, end : Int) -> BitVector {
     // 处理中间的完整字和最后一个字
 
     // 处理中间的完整字和最后一个字
-    for src_idx in (start_word + 1)..=end_word {
+    for src_idx in (start_word + 1)..<=end_word {
       // 高位部分来自上一个字
       let high_bits = self.data[src_idx - 1] << (64 - start_bit)
 
@@ -528,12 +528,14 @@ pub fn BitVector::bitwise_not(self : BitVector) -> BitVector {
   self.flip_all()
 }
 
-///| Creates a bit mask at the specified position (that bit is 1, others are 0)
+///|
+/// Creates a bit mask at the specified position (that bit is 1, others are 0)
 pub fn bit_mask(bit_pos : Int) -> UInt64 {
   (1).to_uint64() << bit_pos
 }
 
-///| Creates a mask from 0 to the specified position (those bits are 1)
+///|
+/// Creates a mask from 0 to the specified position (those bits are 1)
 pub fn low_bits_mask(pos : Int) -> UInt64 {
   if pos >= 63 {
     return uint64_max()

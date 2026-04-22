@@ -1,4 +1,5 @@
 // 构造函数测试
+
 ///|
 test "new_constructor" {
   let bv = @immut_BitVector.new(64)
@@ -51,6 +52,7 @@ test "from_string_constructor" {
 }
 
 // 基本位操作测试
+
 ///|
 test "get_operation" {
   let bv = @immut_BitVector.from_string("10101")
@@ -105,6 +107,7 @@ test "flip_all_operation" {
 }
 
 // 逻辑运算测试
+
 ///|
 test "and_operation" {
   let bv1 = @immut_BitVector.from_string("1010")
@@ -130,6 +133,7 @@ test "xor_operation" {
 }
 
 // 位计数和查找测试
+
 ///|
 test "count_ones" {
   let bv = @immut_BitVector.from_string("101010")
@@ -151,6 +155,7 @@ test "find_first_set" {
 }
 
 // 截取和拼接测试
+
 ///|
 test "slice_operation" {
   let bv = @immut_BitVector.from_string("101010")
@@ -169,6 +174,7 @@ test "concat_operation" {
 }
 
 // 序列化测试
+
 ///|
 test "to_string_operation" {
   let bv = @immut_BitVector.from_string("101010")
@@ -187,6 +193,7 @@ test "to_bools_operation" {
 }
 
 // 实用方法测试
+
 ///|
 test "is_all_zeros" {
   let bv1 = @immut_BitVector.new(100)
@@ -204,6 +211,7 @@ test "is_all_ones" {
 }
 
 // 边界情况测试
+
 ///|
 test "boundary_cases" {
   // 测试跨越多个整数的位向量
@@ -221,6 +229,7 @@ test "boundary_cases" {
 }
 
 // 按位取反操作测试
+
 ///|
 test "not_operation" {
   let bv = @immut_BitVector.from_string("10101")
@@ -611,8 +620,6 @@ test "from_ints_with_remainder" {
   for i in 64..<100 {
     assert_true(bv.get(i))
   }
-
-
 }
 
 ///|
