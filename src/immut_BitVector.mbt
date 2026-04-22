@@ -111,7 +111,7 @@ pub fn from_string(s : String) -> BitVector {
 
 ///|
 /// Gets the boolean value at the specified position in the bit vector
-pub fn get(self : BitVector, index : Int) -> Bool {
+pub fn BitVector::get(self : BitVector, index : Int) -> Bool {
   if index < 0 || index >= self.length {
     abort("Index out of bounds")
   }
@@ -122,7 +122,7 @@ pub fn get(self : BitVector, index : Int) -> Bool {
 
 ///|
 /// Sets the bit at the specified position to 1, returns a new bit vector
-pub fn set(self : BitVector, index : Int) -> BitVector {
+pub fn BitVector::set(self : BitVector, index : Int) -> BitVector {
   if index < 0 || index >= self.length {
     abort("Index out of bounds")
   }
@@ -142,7 +142,7 @@ pub fn set(self : BitVector, index : Int) -> BitVector {
 
 ///|
 /// Clears the bit at the specified position to 0, returns a new bit vector
-pub fn clear(self : BitVector, index : Int) -> BitVector {
+pub fn BitVector::clear(self : BitVector, index : Int) -> BitVector {
   if index < 0 || index >= self.length {
     abort("Index out of bounds")
   }
@@ -163,7 +163,7 @@ pub fn clear(self : BitVector, index : Int) -> BitVector {
 
 ///|
 /// Flips the value of the bit at the specified position, returns a new bit vector
-pub fn flip(self : BitVector, index : Int) -> BitVector {
+pub fn BitVector::flip(self : BitVector, index : Int) -> BitVector {
   if index < 0 || index >= self.length {
     abort("Index out of bounds")
   }
@@ -178,7 +178,7 @@ pub fn flip(self : BitVector, index : Int) -> BitVector {
 
 ///|
 /// Flips all bits in the vector, returns a new bit vector
-pub fn flip_all(self : BitVector) -> BitVector {
+pub fn BitVector::flip_all(self : BitVector) -> BitVector {
   let new_data = self.data.copy()
 
   // Flip all integers
@@ -200,7 +200,7 @@ pub fn flip_all(self : BitVector) -> BitVector {
 
 ///|
 /// Performs bitwise AND operation on bit vectors, returns a new bit vector
-pub fn and(self : BitVector, other : BitVector) -> BitVector {
+pub fn BitVector::bitwise_and(self : BitVector, other : BitVector) -> BitVector {
   if self.length != other.length {
     abort("BitVectors must have the same length for logical operations")
   }
@@ -215,7 +215,7 @@ pub fn and(self : BitVector, other : BitVector) -> BitVector {
 
 ///|
 /// Performs bitwise OR operation on bit vectors, returns a new bit vector
-pub fn or(self : BitVector, other : BitVector) -> BitVector {
+pub fn BitVector::bitwise_or(self : BitVector, other : BitVector) -> BitVector {
   if self.length != other.length {
     abort("BitVectors must have the same length for logical operations")
   }
@@ -230,7 +230,7 @@ pub fn or(self : BitVector, other : BitVector) -> BitVector {
 
 ///|
 /// Performs bitwise XOR operation on bit vectors, returns a new bit vector
-pub fn xor(self : BitVector, other : BitVector) -> BitVector {
+pub fn BitVector::xor(self : BitVector, other : BitVector) -> BitVector {
   if self.length != other.length {
     abort("BitVectors must have the same length for logical operations")
   }
@@ -249,7 +249,7 @@ pub fn xor(self : BitVector, other : BitVector) -> BitVector {
 
 ///|
 /// Counts the number of 1s in the bit vector
-pub fn count_ones(self : BitVector) -> Int {
+pub fn BitVector::count_ones(self : BitVector) -> Int {
   let mut count = 0
 
   // Process all integers except the last one
@@ -267,7 +267,7 @@ pub fn count_ones(self : BitVector) -> Int {
 
 ///|
 /// Counts the number of 0s in the bit vector
-pub fn count_zeros(self : BitVector) -> Int {
+pub fn BitVector::count_zeros(self : BitVector) -> Int {
   self.length - self.count_ones()
 }
 
@@ -285,7 +285,7 @@ fn pop_count(x : UInt64) -> Int {
 
 ///|
 /// Finds the index of the first bit set to 1 in the vector, returns -1 if none
-pub fn find_first_set(self : BitVector) -> Int {
+pub fn BitVector::find_first_set(self : BitVector) -> Int {
   for i in 0..<self.data.length() {
     if self.data[i] != 0 {
       let word = self.data[i]
@@ -332,7 +332,7 @@ pub fn lowest_set_bit(x : UInt64) -> Int {
 
 ///|
 /// Extracts a sub-vector from the bit vector, starting at start (inclusive) and ending at end (exclusive)
-pub fn slice(self : BitVector, start : Int, end : Int) -> BitVector {
+pub fn BitVector::slice(self : BitVector, start : Int, end : Int) -> BitVector {
   if start < 0 || end > self.length || start > end {
     abort("Invalid slice range")
   }
@@ -409,7 +409,7 @@ pub fn slice(self : BitVector, start : Int, end : Int) -> BitVector {
 
 ///|
 /// Concatenates two bit vectors, returns a new bit vector
-pub fn concat(self : BitVector, other : BitVector) -> BitVector {
+pub fn BitVector::concat(self : BitVector, other : BitVector) -> BitVector {
   let new_length = self.length + other.length
   let result = new(new_length)
 
@@ -456,7 +456,7 @@ pub fn concat(self : BitVector, other : BitVector) -> BitVector {
 
 ///|
 /// Converts the bit vector to a string representation, 1 for set bits, 0 for clear bits
-pub fn to_string(self : BitVector) -> String {
+pub fn BitVector::to_string(self : BitVector) -> String {
   let mut result = ""
   for i in 0..<self.length {
     if self.get(i) {
@@ -470,7 +470,7 @@ pub fn to_string(self : BitVector) -> String {
 
 ///|
 /// Converts the bit vector to an array of booleans
-pub fn to_bools(self : BitVector) -> FixedArray[Bool] {
+pub fn BitVector::to_bools(self : BitVector) -> FixedArray[Bool] {
   let result = FixedArray::make(self.length, false)
   for i in 0..<self.length {
     if self.get(i) {
@@ -486,7 +486,7 @@ pub fn to_bools(self : BitVector) -> FixedArray[Bool] {
 
 ///|
 /// Checks if the bit vector is all zeros
-pub fn is_all_zeros(self : BitVector) -> Bool {
+pub fn BitVector::is_all_zeros(self : BitVector) -> Bool {
   for i = 0; i < self.data.length() - 1; i = i + 1 {
     if self.data[i] != 0 {
       return false
@@ -502,7 +502,7 @@ pub fn is_all_zeros(self : BitVector) -> Bool {
 
 ///|
 /// Checks if the bit vector is all ones
-pub fn is_all_ones(self : BitVector) -> Bool {
+pub fn BitVector::is_all_ones(self : BitVector) -> Bool {
   for i = 0; i < self.data.length() - 1; i = i + 1 {
     if self.data[i] != uint64_max() {
       return false
@@ -519,12 +519,12 @@ pub fn is_all_ones(self : BitVector) -> Bool {
 
 ///|
 /// Gets the length of the bit vector
-pub fn length(self : BitVector) -> Int {
+pub fn BitVector::length(self : BitVector) -> Int {
   self.length
 }
 
 ///|
-pub fn not(self : BitVector) -> BitVector {
+pub fn BitVector::bitwise_not(self : BitVector) -> BitVector {
   self.flip_all()
 }
 

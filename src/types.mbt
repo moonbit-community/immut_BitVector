@@ -8,4 +8,4 @@ pub(all) struct BitVector {
 
   /// Optimization constant, recording the number of valid bits in the last UInt64
   last_mask : UInt64
-} derive(Eq, Show) ///|
+} derive(Eq, Debug) ///|

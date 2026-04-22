@@ -64,7 +64,7 @@ test "panic from_ints with mismatched length should panic" {
 test "panic and with different length should panic" {
   let bv1 = @immut_BitVector.new(10)
   let bv2 = @immut_BitVector.new(15)
-  let result = bv1.and(bv2) // 不同长度的位向量
+  let result = bv1.bitwise_and(bv2) // 不同长度的位向量
   result |> ignore
 }
 
@@ -72,7 +72,7 @@ test "panic and with different length should panic" {
 test "panic or with different length should panic" {
   let bv1 = @immut_BitVector.new(10)
   let bv2 = @immut_BitVector.new(15)
-  let result = bv1.or(bv2) // 不同长度的位向量
+  let result = bv1.bitwise_or(bv2) // 不同长度的位向量
   result |> ignore
 }
 
