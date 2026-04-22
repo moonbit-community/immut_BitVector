@@ -1,0 +1,60 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "kesmeey/immut_BitVector"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn bit_mask(Int) -> UInt64
+
+pub fn from_bools(FixedArray[Bool]) -> BitVector
+
+pub fn from_ints(FixedArray[UInt64], Int) -> BitVector
+
+pub fn from_string(String) -> BitVector
+
+pub fn low_bits_mask(Int) -> UInt64
+
+pub fn lowest_set_bit(UInt64) -> Int
+
+pub fn lowest_unset_bit(UInt64) -> Int
+
+pub fn new(Int) -> BitVector
+
+pub fn ones(Int) -> BitVector
+
+pub fn uint64_max() -> UInt64
+
+// Errors
+
+// Types and methods
+pub(all) struct BitVector {
+  data : FixedArray[UInt64]
+  length : Int
+  last_mask : UInt64
+} derive(Eq, @debug.Debug)
+pub fn BitVector::bitwise_and(Self, Self) -> Self
+pub fn BitVector::bitwise_not(Self) -> Self
+pub fn BitVector::bitwise_or(Self, Self) -> Self
+pub fn BitVector::clear(Self, Int) -> Self
+pub fn BitVector::concat(Self, Self) -> Self
+pub fn BitVector::count_ones(Self) -> Int
+pub fn BitVector::count_zeros(Self) -> Int
+pub fn BitVector::find_first_set(Self) -> Int
+pub fn BitVector::flip(Self, Int) -> Self
+pub fn BitVector::flip_all(Self) -> Self
+pub fn BitVector::get(Self, Int) -> Bool
+pub fn BitVector::is_all_ones(Self) -> Bool
+pub fn BitVector::is_all_zeros(Self) -> Bool
+pub fn BitVector::length(Self) -> Int
+pub fn BitVector::set(Self, Int) -> Self
+pub fn BitVector::slice(Self, Int, Int) -> Self
+pub fn BitVector::to_bools(Self) -> FixedArray[Bool]
+pub fn BitVector::to_string(Self) -> String
+pub fn BitVector::xor(Self, Self) -> Self
+
+// Type aliases
+
+// Traits
+
