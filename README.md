@@ -60,40 +60,40 @@ let bit = bv.get(3)  // Get bit value at index 3, returns false
 
 // Set bit (returns new bit vector)
 let bv2 = bv.set(3)  // Set bit at index 3 to 1
-assert_eq!(bv2.get(3), true)
-assert_eq!(bv.get(3), false)  // Original vector unchanged
+assert_eq(bv2.get(3), true)
+assert_eq(bv.get(3), false)  // Original vector unchanged
 
 // Clear bit
 let bv3 = bv2.clear(3)  // Clear bit at index 3 to 0
-assert_eq!(bv3.get(3), false)
+assert_eq(bv3.get(3), false)
 
 // Flip bit
 let bv4 = bv.flip(5)  // Flip bit at index 5
-assert_eq!(bv4.get(5), true)
+assert_eq(bv4.get(5), true)
 
 // Flip all bits
 let bv5 = bv.flip_all()  // Flip all bits
-assert_eq!(bv5.get(0), true)
+assert_eq(bv5.get(0), true)
 ```
 
 ### 🔀 Logical Operations
-Use the `and()`, `or()`, `xor()`, and `not()` methods for bitwise logical operations.
+Use the `bitwise_and()`, `bitwise_or()`, `xor()`, and `bitwise_not()` methods for bitwise logical operations.
 
 ```moonbit
 let bv1 = @immut_BitVector.from_string("1100")
 let bv2 = @immut_BitVector.from_string("1010")
 
 // Bitwise AND
-let and_result = bv1.and(bv2)  // "1000"
+let and_result = bv1.bitwise_and(bv2)  // "1000"
 
 // Bitwise OR
-let or_result = bv1.or(bv2)  // "1110"
+let or_result = bv1.bitwise_or(bv2)  // "1110"
 
 // Bitwise XOR
 let xor_result = bv1.xor(bv2)  // "0110"
 
 // Bitwise NOT (flip all bits)
-let not_result = bv1.not()  // "0011"
+let not_result = bv1.bitwise_not()  // "0011"
 ```
 
 ### 🔢 Bit Counting and Finding
@@ -147,15 +147,15 @@ let bv1 = @immut_BitVector.new(10)  // All-0 bit vector
 let bv2 = @immut_BitVector.ones(10)  // All-1 bit vector
 
 // Check if all bits are 0
-assert_true!(bv1.is_all_zeros())
-assert_false!(bv2.is_all_zeros())
+assert_true(bv1.is_all_zeros())
+assert_false(bv2.is_all_zeros())
 
 // Check if all bits are 1
-assert_true!(bv2.is_all_ones())
-assert_false!(bv1.is_all_ones())
+assert_true(bv2.is_all_ones())
+assert_false(bv1.is_all_ones())
 
 // Get length
-assert_eq!(bv1.length(), 10)
+assert_eq(bv1.length(), 10)
 
 // Create bit masks
 let mask = @immut_BitVector.bit_mask(3)  // Create mask at position 3 (...0001000)
@@ -172,8 +172,8 @@ let set_a = @immut_BitVector.from_string("1010100101")  // Contains elements 0,2
 let set_b = @immut_BitVector.from_string("1100011001")  // Contains elements 0,3,4,5,8,9
 
 // Set operations
-let union = set_a.or(set_b)         // Union
-let intersection = set_a.and(set_b)  // Intersection
+let union = set_a.bitwise_or(set_b)         // Union
+let intersection = set_a.bitwise_and(set_b)  // Intersection
 let difference = set_a.xor(set_b)    // Symmetric difference
 
 // Print results
@@ -200,7 +200,7 @@ if flags.get(10) {
 
 // Use masks for batch operations
 let mask = @immut_BitVector.from_string("00111100")  // Bit mask
-let masked = flags.slice(0, 8).and(mask)  // Apply mask to first 8 bits
+let masked = flags.slice(0, 8).bitwise_and(mask)  // Apply mask to first 8 bits
 
 println("After applying mask: " + masked.to_string())
 ```

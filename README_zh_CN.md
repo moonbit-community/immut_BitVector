@@ -61,40 +61,40 @@ let bit = bv.get(3)  // 获取索引3处的位值，返回false
 
 // 设置位（返回新位向量）
 let bv2 = bv.set(3)  // 将索引3处的位设为1
-assert_eq!(bv2.get(3), true)
-assert_eq!(bv.get(3), false)  // 原位向量不变
+assert_eq(bv2.get(3), true)
+assert_eq(bv.get(3), false)  // 原位向量不变
 
 // 清除位
 let bv3 = bv2.clear(3)  // 将索引3处的位清为0
-assert_eq!(bv3.get(3), false)
+assert_eq(bv3.get(3), false)
 
 // 翻转位
 let bv4 = bv.flip(5)  // 翻转索引5处的位
-assert_eq!(bv4.get(5), true)
+assert_eq(bv4.get(5), true)
 
 // 翻转所有位
 let bv5 = bv.flip_all()  // 翻转所有位
-assert_eq!(bv5.get(0), true)
+assert_eq(bv5.get(0), true)
 ```
 
 ### 🔀 逻辑操作
-使用`and()`、`or()`、`xor()`和`not()`方法进行按位逻辑运算。
+使用`bitwise_and()`、`bitwise_or()`、`xor()`和`bitwise_not()`方法进行按位逻辑运算。
 
 ```moonbit
 let bv1 = @immut_BitVector.from_string("1100")
 let bv2 = @immut_BitVector.from_string("1010")
 
 // 按位与
-let and_result = bv1.and(bv2)  // "1000"
+let and_result = bv1.bitwise_and(bv2)  // "1000"
 
 // 按位或
-let or_result = bv1.or(bv2)  // "1110"
+let or_result = bv1.bitwise_or(bv2)  // "1110"
 
 // 按位异或
 let xor_result = bv1.xor(bv2)  // "0110"
 
 // 按位非（翻转所有位）
-let not_result = bv1.not()  // "0011"
+let not_result = bv1.bitwise_not()  // "0011"
 ```
 
 ### 🔢 位统计和查找
@@ -148,15 +148,15 @@ let bv1 = @immut_BitVector.new(10)  // 全0位向量
 let bv2 = @immut_BitVector.ones(10)  // 全1位向量
 
 // 检查是否全0
-assert_true!(bv1.is_all_zeros())
-assert_false!(bv2.is_all_zeros())
+assert_true(bv1.is_all_zeros())
+assert_false(bv2.is_all_zeros())
 
 // 检查是否全1
-assert_true!(bv2.is_all_ones())
-assert_false!(bv1.is_all_ones())
+assert_true(bv2.is_all_ones())
+assert_false(bv1.is_all_ones())
 
 // 获取长度
-assert_eq!(bv1.length(), 10)
+assert_eq(bv1.length(), 10)
 
 // 创建位掩码
 let mask = @immut_BitVector.bit_mask(3)  // 在位置3创建掩码（...0001000）
@@ -173,8 +173,8 @@ let set_a = @immut_BitVector.from_string("1010100101")  // 包含元素0,2,4,7,9
 let set_b = @immut_BitVector.from_string("1100011001")  // 包含元素0,3,4,5,8,9
 
 // 集合操作
-let union = set_a.or(set_b)         // 并集
-let intersection = set_a.and(set_b)  // 交集
+let union = set_a.bitwise_or(set_b)         // 并集
+let intersection = set_a.bitwise_and(set_b)  // 交集
 let difference = set_a.xor(set_b)    // 对称差
 
 // 打印结果
@@ -201,7 +201,7 @@ if flags.get(10) {
 
 // 使用掩码进行批量操作
 let mask = @immut_BitVector.from_string("00111100")  // 位掩码
-let masked = flags.slice(0, 8).and(mask)  // 应用掩码到前8位
+let masked = flags.slice(0, 8).bitwise_and(mask)  // 应用掩码到前8位
 
 println("应用掩码后: " + masked.to_string())
 ```
