@@ -6,4 +6,10 @@ pub(all) struct BitVector {
   length : Int
   /// Optimization constant, recording the number of valid bits in the last UInt64
   last_mask : UInt64
-} derive(Eq, Debug) ///|
+} derive(Eq, Debug)
+
+///|
+pub extend BitVector with Eq::{not_equal, equal}
+
+///|
+pub extend BitVector with @debug.Debug::{to_repr}

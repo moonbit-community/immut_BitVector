@@ -41,6 +41,7 @@ pub fn BitVector::clear(Self, Int) -> Self
 pub fn BitVector::concat(Self, Self) -> Self
 pub fn BitVector::count_ones(Self) -> Int
 pub fn BitVector::count_zeros(Self) -> Int
+pub fn BitVector::equal(Self, Self) -> Bool
 pub fn BitVector::find_first_set(Self) -> Int
 pub fn BitVector::flip(Self, Int) -> Self
 pub fn BitVector::flip_all(Self) -> Self
@@ -48,9 +49,11 @@ pub fn BitVector::get(Self, Int) -> Bool
 pub fn BitVector::is_all_ones(Self) -> Bool
 pub fn BitVector::is_all_zeros(Self) -> Bool
 pub fn BitVector::length(Self) -> Int
+pub fn BitVector::not_equal(Self, Self) -> Bool
 pub fn BitVector::set(Self, Int) -> Self
 pub fn BitVector::slice(Self, Int, Int) -> Self
 pub fn BitVector::to_bools(Self) -> FixedArray[Bool]
+pub fn BitVector::to_repr(Self) -> @debug.Repr
 pub fn BitVector::to_string(Self) -> String
 pub fn BitVector::xor(Self, Self) -> Self
 
