@@ -601,8 +601,8 @@ test "from_ints_with_remainder" {
   // 创建一个长度不是64倍数的UInt64数组
   // 例如，创建一个长度为100位的位向量(需要2个UInt64)
   let ints = FixedArray::from_array([
-    uint64_max(), // 第一个UInt64全为1
-    uint64_max(), // 第二个UInt64全为1，但我们只需要使用前36位
+    @immut_BitVector.uint64_max(), // 第一个UInt64全为1
+    @immut_BitVector.uint64_max(), // 第二个UInt64全为1，但我们只需要使用前36位
   ])
 
   // 创建长度为100的位向量
