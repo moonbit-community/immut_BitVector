@@ -9,7 +9,7 @@ pub fn uint64_max() -> UInt64 {
 
 ///|
 /// Creates a bit vector of specified length with all bits set to 0
-pub fn new(length : Int) -> BitVector {
+pub fn new(length : Int32) -> BitVector {
   if length < 0 {
     abort("BitVector length must be positive")
   }
@@ -25,12 +25,12 @@ pub fn new(length : Int) -> BitVector {
   } else {
     ((1).to_uint64() << remainder) - (1).to_uint64()
   }
-  { data, length, last_mask }
+  { data, length, last_mask, }
 }
 
 ///|
 /// Creates a bit vector of specified length with all bits set to 1
-pub fn ones(length : Int) -> BitVector {
+pub fn ones(length : Int32) -> BitVector {
   let bv = new(length)
 
   // Fill all UInt64s with 1s
@@ -47,7 +47,7 @@ pub fn ones(length : Int) -> BitVector {
 
 ///|
 /// Creates a bit vector from an array of integers
-pub fn from_ints(ints : FixedArray[UInt64], length : Int) -> BitVector {
+pub fn from_ints(ints : FixedArray[UInt64], length : Int32) -> BitVector {
   if length <= 0 {
     abort("BitVector length must be positive")
   }
@@ -69,7 +69,7 @@ pub fn from_ints(ints : FixedArray[UInt64], length : Int) -> BitVector {
   if data.length() > 0 && remainder != 0 {
     data[data.length() - 1] = data[data.length() - 1] & last_mask
   }
-  { data, length, last_mask }
+  { data, length, last_mask, }
 }
 
 ///|
@@ -111,7 +111,7 @@ pub fn from_string(s : String) -> BitVector {
 
 ///|
 /// Gets the boolean value at the specified position in the bit vector
-pub fn BitVector::get(self : BitVector, index : Int) -> Bool {
+pub fn BitVector::get(self : BitVector, index : Int32) -> Bool {
   if index < 0 || index >= self.length {
     abort("Index out of bounds")
   }
@@ -122,7 +122,7 @@ pub fn BitVector::get(self : BitVector, index : Int) -> Bool {
 
 ///|
 /// Sets the bit at the specified position to 1, returns a new bit vector
-pub fn BitVector::set(self : BitVector, index : Int) -> BitVector {
+pub fn BitVector::set(self : BitVector, index : Int32) -> BitVector {
   if index < 0 || index >= self.length {
     abort("Index out of bounds")
   }
@@ -137,12 +137,12 @@ pub fn BitVector::set(self : BitVector, index : Int) -> BitVector {
   // Create a new bit vector
   let new_data = self.data.copy()
   new_data[word_idx] = new_data[word_idx] | ((1).to_uint64() << bit_idx)
-  { data: new_data, length: self.length, last_mask: self.last_mask }
+  { data: new_data, length: self.length, last_mask: self.last_mask, }
 }
 
 ///|
 /// Clears the bit at the specified position to 0, returns a new bit vector
-pub fn BitVector::clear(self : BitVector, index : Int) -> BitVector {
+pub fn BitVector::clear(self : BitVector, index : Int32) -> BitVector {
   if index < 0 || index >= self.length {
     abort("Index out of bounds")
   }
@@ -158,12 +158,12 @@ pub fn BitVector::clear(self : BitVector, index : Int) -> BitVector {
   let new_data = self.data.copy()
   new_data[word_idx] = new_data[word_idx] &
     (uint64_max() ^ ((1).to_uint64() << bit_idx))
-  { data: new_data, length: self.length, last_mask: self.last_mask }
+  { data: new_data, length: self.length, last_mask: self.last_mask, }
 }
 
 ///|
 /// Flips the value of the bit at the specified position, returns a new bit vector
-pub fn BitVector::flip(self : BitVector, index : Int) -> BitVector {
+pub fn BitVector::flip(self : BitVector, index : Int32) -> BitVector {
   if index < 0 || index >= self.length {
     abort("Index out of bounds")
   }
@@ -173,7 +173,7 @@ pub fn BitVector::flip(self : BitVector, index : Int) -> BitVector {
   // Create a new bit vector
   let new_data = self.data.copy()
   new_data[word_idx] = new_data[word_idx] ^ ((1).to_uint64() << bit_idx)
-  { data: new_data, length: self.length, last_mask: self.last_mask }
+  { data: new_data, length: self.length, last_mask: self.last_mask, }
 }
 
 ///|
@@ -191,7 +191,7 @@ pub fn BitVector::flip_all(self : BitVector) -> BitVector {
     new_data[new_data.length() - 1] = new_data[new_data.length() - 1] &
       self.last_mask
   }
-  { data: new_data, length: self.length, last_mask: self.last_mask }
+  { data: new_data, length: self.length, last_mask: self.last_mask, }
 }
 
 //-----------------------------------------------------------------------------
@@ -210,7 +210,7 @@ pub fn BitVector::bitwise_and(self : BitVector, other : BitVector) -> BitVector 
   for i in 0..<new_data.length() {
     new_data[i] = self.data[i] & other.data[i]
   }
-  { data: new_data, length: self.length, last_mask: self.last_mask }
+  { data: new_data, length: self.length, last_mask: self.last_mask, }
 }
 
 ///|
@@ -225,7 +225,7 @@ pub fn BitVector::bitwise_or(self : BitVector, other : BitVector) -> BitVector {
   for i in 0..<new_data.length() {
     new_data[i] = self.data[i] | other.data[i]
   }
-  { data: new_data, length: self.length, last_mask: self.last_mask }
+  { data: new_data, length: self.length, last_mask: self.last_mask, }
 }
 
 ///|
@@ -240,7 +240,7 @@ pub fn BitVector::xor(self : BitVector, other : BitVector) -> BitVector {
   for i in 0..<new_data.length() {
     new_data[i] = self.data[i] ^ other.data[i]
   }
-  { data: new_data, length: self.length, last_mask: self.last_mask }
+  { data: new_data, length: self.length, last_mask: self.last_mask, }
 }
 
 //-----------------------------------------------------------------------------
@@ -249,7 +249,7 @@ pub fn BitVector::xor(self : BitVector, other : BitVector) -> BitVector {
 
 ///|
 /// Counts the number of 1s in the bit vector
-pub fn BitVector::count_ones(self : BitVector) -> Int {
+pub fn BitVector::count_ones(self : BitVector) -> Int32 {
   let mut count = 0
 
   // Process all integers except the last one
@@ -267,13 +267,13 @@ pub fn BitVector::count_ones(self : BitVector) -> Int {
 
 ///|
 /// Counts the number of 0s in the bit vector
-pub fn BitVector::count_zeros(self : BitVector) -> Int {
+pub fn BitVector::count_zeros(self : BitVector) -> Int32 {
   self.length - self.count_ones()
 }
 
 ///|
 /// Helper function: Count the number of 1s in an integer
-fn pop_count(x : UInt64) -> Int {
+fn pop_count(x : UInt64) -> Int32 {
   let mut x = x
   let mut count = 0
   while x != 0 {
@@ -285,7 +285,7 @@ fn pop_count(x : UInt64) -> Int {
 
 ///|
 /// Finds the index of the first bit set to 1 in the vector, returns -1 if none
-pub fn BitVector::find_first_set(self : BitVector) -> Int {
+pub fn BitVector::find_first_set(self : BitVector) -> Int32 {
   for i in 0..<self.data.length() {
     if self.data[i] != 0 {
       let word = self.data[i]
@@ -298,7 +298,7 @@ pub fn BitVector::find_first_set(self : BitVector) -> Int {
 
 ///|
 /// Finds the index of the first bit set to 0 in the integer, returns -1 if none
-pub fn lowest_unset_bit(x : UInt64) -> Int {
+pub fn lowest_unset_bit(x : UInt64) -> Int32 {
   if x == uint64_max() {
     return 64 // indicates no 0 bits
   }
@@ -313,7 +313,7 @@ pub fn lowest_unset_bit(x : UInt64) -> Int {
 
 ///|
 /// Helper function: Find the position of the lowest 1 bit in an integer
-pub fn lowest_set_bit(x : UInt64) -> Int {
+pub fn lowest_set_bit(x : UInt64) -> Int32 {
   if x == 0 {
     return -1
   }
@@ -332,7 +332,11 @@ pub fn lowest_set_bit(x : UInt64) -> Int {
 
 ///|
 /// Extracts a sub-vector from the bit vector, starting at start (inclusive) and ending at end (exclusive)
-pub fn BitVector::slice(self : BitVector, start : Int, end : Int) -> BitVector {
+pub fn BitVector::slice(
+  self : BitVector,
+  start : Int32,
+  end : Int32,
+) -> BitVector {
   if start < 0 || end > self.length || start > end {
     abort("Invalid slice range")
   }
@@ -519,7 +523,7 @@ pub fn BitVector::is_all_ones(self : BitVector) -> Bool {
 
 ///|
 /// Gets the length of the bit vector
-pub fn BitVector::length(self : BitVector) -> Int {
+pub fn BitVector::length(self : BitVector) -> Int32 {
   self.length
 }
 
@@ -530,13 +534,13 @@ pub fn BitVector::bitwise_not(self : BitVector) -> BitVector {
 
 ///|
 /// Creates a bit mask at the specified position (that bit is 1, others are 0)
-pub fn bit_mask(bit_pos : Int) -> UInt64 {
+pub fn bit_mask(bit_pos : Int32) -> UInt64 {
   (1).to_uint64() << bit_pos
 }
 
 ///|
 /// Creates a mask from 0 to the specified position (those bits are 1)
-pub fn low_bits_mask(pos : Int) -> UInt64 {
+pub fn low_bits_mask(pos : Int32) -> UInt64 {
   if pos >= 63 {
     return uint64_max()
   }

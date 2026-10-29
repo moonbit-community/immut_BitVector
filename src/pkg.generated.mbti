@@ -6,23 +6,23 @@ import {
 }
 
 // Values
-pub fn bit_mask(Int) -> UInt64
+pub fn bit_mask(Int32) -> UInt64
 
 pub fn from_bools(FixedArray[Bool]) -> BitVector
 
-pub fn from_ints(FixedArray[UInt64], Int) -> BitVector
+pub fn from_ints(FixedArray[UInt64], Int32) -> BitVector
 
 pub fn from_string(String) -> BitVector
 
-pub fn low_bits_mask(Int) -> UInt64
+pub fn low_bits_mask(Int32) -> UInt64
 
-pub fn lowest_set_bit(UInt64) -> Int
+pub fn lowest_set_bit(UInt64) -> Int32
 
-pub fn lowest_unset_bit(UInt64) -> Int
+pub fn lowest_unset_bit(UInt64) -> Int32
 
-pub fn new(Int) -> BitVector
+pub fn new(Int32) -> BitVector
 
-pub fn ones(Int) -> BitVector
+pub fn ones(Int32) -> BitVector
 
 pub fn uint64_max() -> UInt64
 
@@ -31,30 +31,32 @@ pub fn uint64_max() -> UInt64
 // Types and methods
 pub(all) struct BitVector {
   data : FixedArray[UInt64]
-  length : Int
+  length : Int32
   last_mask : UInt64
 } derive(Eq, @debug.Debug)
 pub fn BitVector::bitwise_and(Self, Self) -> Self
 pub fn BitVector::bitwise_not(Self) -> Self
 pub fn BitVector::bitwise_or(Self, Self) -> Self
-pub fn BitVector::clear(Self, Int) -> Self
+pub fn BitVector::clear(Self, Int32) -> Self
 pub fn BitVector::concat(Self, Self) -> Self
-pub fn BitVector::count_ones(Self) -> Int
-pub fn BitVector::count_zeros(Self) -> Int
-pub fn BitVector::find_first_set(Self) -> Int
-pub fn BitVector::flip(Self, Int) -> Self
+pub fn BitVector::count_ones(Self) -> Int32
+pub fn BitVector::count_zeros(Self) -> Int32
+pub fn BitVector::equal(Self, Self) -> Bool
+pub fn BitVector::find_first_set(Self) -> Int32
+pub fn BitVector::flip(Self, Int32) -> Self
 pub fn BitVector::flip_all(Self) -> Self
-pub fn BitVector::get(Self, Int) -> Bool
+pub fn BitVector::get(Self, Int32) -> Bool
 pub fn BitVector::is_all_ones(Self) -> Bool
 pub fn BitVector::is_all_zeros(Self) -> Bool
-pub fn BitVector::length(Self) -> Int
-pub fn BitVector::set(Self, Int) -> Self
-pub fn BitVector::slice(Self, Int, Int) -> Self
+pub fn BitVector::length(Self) -> Int32
+pub fn BitVector::not_equal(Self, Self) -> Bool
+pub fn BitVector::set(Self, Int32) -> Self
+pub fn BitVector::slice(Self, Int32, Int32) -> Self
 pub fn BitVector::to_bools(Self) -> FixedArray[Bool]
+pub fn BitVector::to_repr(Self) -> @debug.Repr
 pub fn BitVector::to_string(Self) -> String
 pub fn BitVector::xor(Self, Self) -> Self
 
 // Type aliases
 
 // Traits
-

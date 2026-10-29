@@ -1,3 +1,7 @@
 options(
   targets: { "panic_test.mbt": [ "not", "native", "llvm" ] },
 )
+
+import {
+  "moonbitlang/core/debug",
+}
